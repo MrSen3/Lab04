@@ -12,7 +12,7 @@
 
 <BorderPane prefHeight="500.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.lab04.controller.SegreteriaStudentiController">
    <top>
-      <Label text="Lab3_Segreteria Studenti" BorderPane.alignment="CENTER">
+      <Label text="Lab4_Segreteria Studenti" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="20.0" top="10.0" />
          </BorderPane.margin></Label>
@@ -36,7 +36,7 @@
             </HBox>
             <HBox prefHeight="31.0" prefWidth="660.0">
                <children>
-                  <Button fx:id="btnCercaIscritti" mnemonicParsing="false" text="Cerca iscritti corso">
+                  <Button fx:id="btnCercaIscritti" mnemonicParsing="false" onAction="#doCercaIscritti" text="Cerca iscritti corso">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>

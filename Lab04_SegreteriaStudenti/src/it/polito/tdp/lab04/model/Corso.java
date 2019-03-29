@@ -20,6 +20,16 @@ public class Corso {
 	
 	
 	
+	public Corso(String nome) {
+		// TODO Auto-generated constructor stub
+		this.nome=nome;
+	}
+	
+	
+
+
+
+
 	public String getCodins() {
 		return codins;
 	}

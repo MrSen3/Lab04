@@ -7,9 +7,13 @@ public class Studente {
 	private String nome;
 	private String cds;
 	
+
+	public Studente(int matricola) {
+		this.matricola = matricola;
+	}
+
 	
 	public Studente(int matricola, String cognome, String nome, String cds) {
-		super();
 		this.matricola = matricola;
 		this.cognome = cognome;
 		this.nome = nome;

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,20 +49,61 @@ public class StudenteDAO {
 
 	
 	
-	
-	/*
-	 * Dato una matricola, ottengo nome e cognome
+	/**
+	 * Restituisce uno studente, data un numero di matricola (@matricola)
+	 * @param matricola
+	 * @return
 	 */
-	public void getNomeCognome(Studente studente) {
+	public Studente getNomeCognome(int matricola) {
 		// TODO
+		String sql = "SELECT * FROM studente where matricola = ? ";
+		Studente s = null;
+		Connection conn = ConnectDB.getConnection();
+		try {
+		
+			
+			//Si blocca qua
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			
+			st.setInt(1, matricola);
+			
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				s = new Studente(matricola, rs.getString("nome"), rs.getString("cognome"), rs.getString("cds"));
+			}
+			
+			conn.close();
+			
+			return s;
+			
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+		
+		
 	}
+
+
+
+
 
 	/*
 	 * Ottengo tutti gli studenti iscritti al Corso
 	 */
-	//public void getStudentiIscrittiAlCorso(Corso corso) {
+	public List<Studente> getStudentiIscrittiAlCorso(String nomeCorso) {
+		
+		
+		
+		List<Studente> studentiIscritti=new ArrayList<Studente>();
 		// TODO
-	//}
+		//Ora faccio la query usando corso.get e non direttamente la stringa
+	
+	
+		return studentiIscritti;
+	}
 
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.

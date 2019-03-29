@@ -1,6 +1,7 @@
 package it.polito.tdp.lab04.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.lab04.model.*;
@@ -51,24 +52,99 @@ public class SegreteriaStudentiController {
     private Button btnReset;
 
     @FXML
-    void doCercaCorsi(ActionEvent event) {
+    void doCercaIscritti(ActionEvent event) {
+    	//Questo metodo deve prendere il valore contenuto nel combobox e stampare nella text area in fondo tutti gli studenti iscritti a tale corso
+    	txtResult.clear();
     	
-    	model.getCorso(comboBoxCorsi.getValue());
+    	if(comboBoxCorsi.getValue()==null) {
+    		comboBoxCorsi.setValue(comboBoxCorsi.getItems().get(0));
+    	}
+    	
+    	Corso corso = new Corso(comboBoxCorsi.getValue());
+    	System.out.println(corso.getNome());
+    	
+    	//C'è da fare un controllo: se schiaccio il bottone senza fare niente prima genera errori
+    	//if(corso.isEmpty()||corso==null)----  non va
+    	
+    	if(corso.getNome().isEmpty()) { 
+    		txtResult.appendText("ATTENZIONE: Nessun corso è stato selezionato!\n");
+    		return;
+    	} 
+    	
+    	List<String> iscrittiAlCorso = this.model.getCorso(corso.getNome());
+    	
+    	for(String s: iscrittiAlCorso) {
+    		txtResult.appendText(s+ "\n");
+    	}
+    	
+    	
+    
+    }
+    
+    @FXML
+    void doCercaCorsi(ActionEvent event) {
+    	//Questo metodo deve prendere la matricola contenuta nel textfield apposito, controllare se e' presennte nel database, e se lo e' stampare nella text area in fondo tutti i corsi a cui e' iscritto
+    	
+   
+    
     }
 
     @FXML
     void doCompleta(ActionEvent event) {
-
+    	//Scritta la matricola il pulsante verde deve completare automaticamente i campi nome e cognome, tanto la matricola e' univoca
+    	
+    	txtResult.clear();
+		txtNome.clear();
+		txtCognome.clear();
+    	
+		int matricola;
+		Studente s;
+		
+    	try {
+    		//Questa funziona bene
+    		matricola=Integer.parseInt(txtMatricola.getText());
+    		
+    		//Cerco lo studente tramite il metodo nel model
+    		s=model.getNomeECognome(matricola);
+    		
+    		//Se non esiste la matricola nel db
+    		if(s == null) {
+    			txtResult.appendText("Nessuno studente corrispondente alla matricola!\n");
+    			return;
+    		}
+    		
+    		//Se lo studente esiste stampo nei due textfield nome e cognome
+    		txtNome.setText(s.getNome());
+        	txtCognome.setText(s.getCognome());
+    		
+    	} catch (NumberFormatException e) {
+    		txtResult.appendText("Devi inserire una matricola composta da 6 cifre\n");
+     	} catch (RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!\n");
+     	}
+    	
+    	//Studente studente=new Studente(matricola);
+    	
+    	
+    	
     }
 
     @FXML
     void doIscrizione(ActionEvent event) {
 
+    
     }
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	//comboBoxCorsi.setValue(comboBoxCorsi.getItems().get(0)); così si mette sul primo valore della lista
+    	//comboBoxCorsi.setValue("Corsi");
+    	comboBoxCorsi.getSelectionModel().clearSelection();
+    	txtMatricola.clear();
+    	txtNome.clear(); 
+    	txtCognome.clear();   	
+    	txtResult.clear();
+    	
     }
 
     @FXML
@@ -88,6 +164,7 @@ public class SegreteriaStudentiController {
 	public void setModel(Model model) {
 		// TODO Auto-generated method stub
 		this.model=model;
+		comboBoxCorsi.getItems().add("");
 		comboBoxCorsi.getItems().addAll(model.getCorsi());
 		
 	}
