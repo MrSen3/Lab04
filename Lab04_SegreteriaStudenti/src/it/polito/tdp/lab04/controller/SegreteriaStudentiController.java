@@ -54,17 +54,19 @@ public class SegreteriaStudentiController {
     @FXML
     void doCercaIscritti(ActionEvent event) {
     	//Questo metodo deve prendere il valore contenuto nel combobox e stampare nella text area in fondo tutti gli studenti iscritti a tale corso
+    	
+    	//Pulisco la view
     	txtResult.clear();
     	
+    	//Se l'utente non seleziona nessun corso viene selezionato automaticamente lo spazio vuoto
     	if(comboBoxCorsi.getValue()==null) {
     		comboBoxCorsi.setValue(comboBoxCorsi.getItems().get(0));
     	}
     	
+    	    	
     	Corso corso = new Corso(comboBoxCorsi.getValue());
     	System.out.println(corso.getNome());
     	
-    	//C'è da fare un controllo: se schiaccio il bottone senza fare niente prima genera errori
-    	//if(corso.isEmpty()||corso==null)----  non va
     	
     	if(corso.getNome().isEmpty()) { 
     		txtResult.appendText("ATTENZIONE: Nessun corso è stato selezionato!\n");
@@ -84,9 +86,27 @@ public class SegreteriaStudentiController {
     @FXML
     void doCercaCorsi(ActionEvent event) {
     	//Questo metodo deve prendere la matricola contenuta nel textfield apposito, controllare se e' presennte nel database, e se lo e' stampare nella text area in fondo tutti i corsi a cui e' iscritto
+    	txtResult.clear();
+    	int matricola;
+    	Studente s;
     	
+    	try {
+    		//Questa funziona bene
+    		matricola=Integer.parseInt(txtMatricola.getText());
    
-    
+    		s=model.getNomeECognome(matricola);
+    		
+    		if(s==null) {
+    			txtResult.appendText("Nessuno studente corrispondente alla matricola!\n");
+			return;
+		}
+    		
+    		//Se lo studente esiste bisogna stampare nella textResult tutti i corsi a cui è iscritto
+    		model.getCorsiACuiEIscritto(s);
+    		
+    	} catch (NumberFormatException e) {
+    		txtResult.appendText("Devi inserire una matricola composta da 6 cifre\n");
+     	} 
     }
 
     @FXML

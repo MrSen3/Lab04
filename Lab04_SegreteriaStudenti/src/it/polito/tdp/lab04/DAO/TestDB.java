@@ -10,6 +10,11 @@ public class TestDB {
 		
 		CorsoDAO cdao = new CorsoDAO();
 		cdao.getTuttiICorsi();
+		
+		//cdao.getCorso(new Corso("01KSUPG"));
+		//C'è un problema con la classe studentedao
+		StudenteDAO sdao = new StudenteDAO();
+		sdao.getTuttiStudenti();
 
 	}
 

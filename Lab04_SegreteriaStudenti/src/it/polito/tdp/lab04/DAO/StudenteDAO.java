@@ -13,9 +13,13 @@ import it.polito.tdp.lab04.model.Studente;
 
 public class StudenteDAO {
 	
+	/*
+	 * Ottengo tutti gli studenti salvati nel Db
+	 */
+	
 	public List<Studente> getTuttiStudenti() {
 
-		final String sql = "SELECT * FROM studente";
+		String sql = "SELECT * FROM studente";
 
 		List<Studente> studenti = new LinkedList<Studente>();
 
@@ -31,20 +35,26 @@ public class StudenteDAO {
 				String cognome = rs.getString("cognome");
 				String nome = rs.getString("nome");
 				String cds = rs.getString("cds");
+			
 				System.out.println(matricola + " " + cognome + " " + nome + " " + cds);
 
+				studenti.add(new Studente(matricola, cognome, nome, cds));
+				
 				// Crea un nuovo JAVA Bean Studente
 				// Aggiungi il nuovo oggetto Studente alla lista studenti
 			}
 			
+			
 			conn.close();
 
-			return studenti;
-
+			
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			//e.printStackTrace();
 			throw new RuntimeException("Errore Db");
 		}
+		
+		return studenti;
+		
 	}
 
 	
@@ -91,17 +101,42 @@ public class StudenteDAO {
 
 
 	/*
-	 * Ottengo tutti gli studenti iscritti al Corso
+	 * Ottengo tutti gli studenti iscritti al Corso dato il codice del corso
 	 */
-	public List<Studente> getStudentiIscrittiAlCorso(String nomeCorso) {
-		
-		
+	public List<Studente> getStudentiIscrittiAlCorso(String codice) {
+		// TODO
 		
 		List<Studente> studentiIscritti=new ArrayList<Studente>();
-		// TODO
-		//Ora faccio la query usando corso.get e non direttamente la stringa
-	
-	
+		
+		
+		//Per fare la query mi serve il codice del Corso
+		String sql = "SELECT * FROM iscrizione where codins = ? ";
+		Connection conn = ConnectDB.getConnection();
+		
+		try {
+			
+		PreparedStatement st = conn.prepareStatement(sql);
+			
+		st.setString(1, codice);
+			
+		ResultSet rs = st.executeQuery();
+		
+		while (rs.next()) {
+			//Aggiungo le matricole iscritte al corso  che ha il codice passato come parametro
+			
+				studentiIscritti.add(new Studente(rs.getInt("matricola")));
+		}			
+		
+			conn.close();
+			
+			//return studentiIscritti;
+			
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			throw new RuntimeException("Errore Db");
+		}
+		
+	//Quindi ritorna la lista di matricole iscritte al corso
 		return studentiIscritti;
 	}
 

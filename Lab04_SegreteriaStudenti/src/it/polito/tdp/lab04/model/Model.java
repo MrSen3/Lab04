@@ -18,10 +18,9 @@ public class Model {
 
 	public List<String> getCorsi() {
 		// TODO Auto-generated method stub
-		CorsoDAO dao = new CorsoDAO();
 		List<String> stringheCorsi = new ArrayList<String>();
 		
-		for(Corso c: dao.getTuttiICorsi()) {
+		for(Corso c: corsoDao.getTuttiICorsi()) {
 			stringheCorsi.add(c.getNome());
 			
 		}
@@ -30,10 +29,12 @@ public class Model {
 
 	public List<String> getCorso(String nomeCorso) {
 		// TODO Auto-generated method stub
-		StudenteDAO dao = new StudenteDAO();
+		
 		List<String> studentiIscritti = new ArrayList<String>();
 		
-		for(Studente s:  dao.getStudentiIscrittiAlCorso(nomeCorso)) {
+		Corso c = corsoDao.cercaCodiceDatoIlNome(nomeCorso);
+		
+		for(Studente s:  corsoDao.getStudentiIscrittiAlCorso(c)) {
 			studentiIscritti.add(s.getMatricola()+ " "+s.getNome()+" "+s.getCognome());
 		}
 		return studentiIscritti;
@@ -51,6 +52,16 @@ public class Model {
 		// TODO Auto-generated method stub
 		
 		return studenteDao.getNomeCognome(matricola);
+	}
+	
+	
+
+	public List<Corso> getCorsiACuiEIscritto(Studente s) {
+		// TODO Auto-generated method stub
+		List<Corso> corsi = new ArrayList<Corso>();
+		
+		return corsi;
+		
 	}
 	
 	
