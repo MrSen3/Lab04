@@ -51,55 +51,65 @@ public class SegreteriaStudentiController {
     @FXML
     private Button btnReset;
 
+    
+    /*
+     * Questo metodo deve prendere il valore contenuto nel combobox (cioè un nomeCorso)
+     * e stampare nella text area in fondo tutti gli studenti iscritti a tale corso
+     */
+    
     @FXML
     void doCercaIscritti(ActionEvent event) {
-    	//Questo metodo deve prendere il valore contenuto nel combobox e stampare nella text area in fondo tutti gli studenti iscritti a tale corso
     	
     	//Pulisco la view
     	txtResult.clear();
     	
+    	String nomeCorsoScelto = comboBoxCorsi.getValue();
+    	System.out.println(nomeCorsoScelto);
+    	
+    	
     	//Se l'utente non seleziona nessun corso viene selezionato automaticamente lo spazio vuoto
-    	if(comboBoxCorsi.getValue()==null) {
+    	if(nomeCorsoScelto==null) {
     		comboBoxCorsi.setValue(comboBoxCorsi.getItems().get(0));
     	}
     	
-    	    	
-    	Corso corso = new Corso(comboBoxCorsi.getValue());
-    	System.out.println(corso.getNome());
     	
-    	
-    	if(corso.getNome().isEmpty()) { 
+    	if(nomeCorsoScelto.isEmpty()) { 
     		txtResult.appendText("ATTENZIONE: Nessun corso è stato selezionato!\n");
     		return;
     	} 
     	
-    	List<String> iscrittiAlCorso = this.model.getCorso(corso.getNome());
+    	
+    	List<String> iscrittiAlCorso = this.model.getIscrittiAlCorso(nomeCorsoScelto);
     	
     	for(String s: iscrittiAlCorso) {
     		txtResult.appendText(s+ "\n");
-    	}
-    	
-    	
+    	}    	
     
     }
     
+    
+    /*
+     * Questo metodo deve prendere la matricola contenuta nel textfield apposito, controllare 
+     * se e' presente nel database, e se lo e' stampare nella text area in fondo tutti i corsi
+     *  a cui e' iscritto
+     */
     @FXML
     void doCercaCorsi(ActionEvent event) {
-    	//Questo metodo deve prendere la matricola contenuta nel textfield apposito, controllare se e' presennte nel database, e se lo e' stampare nella text area in fondo tutti i corsi a cui e' iscritto
+    	
     	txtResult.clear();
     	int matricola;
     	Studente s;
     	
     	try {
-    		//Questa funziona bene
+    		
     		matricola=Integer.parseInt(txtMatricola.getText());
    
     		s=model.getNomeECognome(matricola);
     		
     		if(s==null) {
     			txtResult.appendText("Nessuno studente corrispondente alla matricola!\n");
-			return;
-		}
+    			return;
+    		}
     		
     		//Se lo studente esiste bisogna stampare nella textResult tutti i corsi a cui è iscritto
     		model.getCorsiACuiEIscritto(s);
@@ -109,9 +119,13 @@ public class SegreteriaStudentiController {
      	} 
     }
 
+    /*
+     * //Scritta la matricola il pulsante verde deve completare automaticamente i campi nome e cognome,
+     *  tanto la matricola e' univoca. FUNZIONA
+     */
     @FXML
     void doCompleta(ActionEvent event) {
-    	//Scritta la matricola il pulsante verde deve completare automaticamente i campi nome e cognome, tanto la matricola e' univoca
+    	
     	
     	txtResult.clear();
 		txtNome.clear();

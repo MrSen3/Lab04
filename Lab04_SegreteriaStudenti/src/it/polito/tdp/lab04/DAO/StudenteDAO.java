@@ -68,14 +68,11 @@ public class StudenteDAO {
 		// TODO
 		String sql = "SELECT * FROM studente where matricola = ? ";
 		Studente s = null;
-		Connection conn = ConnectDB.getConnection();
-		try {
 		
-			
-			//Si blocca qua
+		try {
+			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
-			
-			
+		
 			st.setInt(1, matricola);
 			
 			ResultSet rs = st.executeQuery();
