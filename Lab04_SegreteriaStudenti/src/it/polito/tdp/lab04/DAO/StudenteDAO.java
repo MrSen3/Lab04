@@ -93,7 +93,34 @@ public class StudenteDAO {
 		
 	}
 
-
+	public List<Corso> getCorsiACuiEIscrittoDao (Studente s) {
+		
+		final String sql = "SELECT *\n" + 
+				"FROM corso\n" + 
+				"WHERE codins IN \n" + 
+				"	(SELECT codins \n" + 
+				"	FROM iscrizione\n" + 
+				"	WHERE matricola = ?) ";
+		List<Corso> corsi = new ArrayList<Corso>();
+		
+		Connection conn = ConnectDB.getConnection();
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, s.getMatricola());
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				Corso c = new Corso (rs.getString("codins"), rs.getInt("crediti"), rs.getString("nome"),  rs.getInt("pd"));
+				corsi.add(c);
+			}
+			
+			conn.close();
+			return corsi;
+		}
+		catch (SQLException sqle) {
+			throw new RuntimeException();
+		}
+}
 
 
 

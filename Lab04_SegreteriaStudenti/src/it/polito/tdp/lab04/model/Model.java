@@ -31,23 +31,26 @@ public class Model {
 		return stringheCorsi;
 	}
 
+	/*
+	 * Metodo che ritorna la lista di matricole iscritte al corso (@corsoScelto)
+	 * @param corsoScelto
+	 * @return
+	 */
 
-	public List<String> getIscrittiAlCorso(String nomeCorso) {
+	public List<String> getIscrittiAlCorso(Corso corsoScelto) {
 		// TODO Auto-generated method stub
 		
 		List<String> studentiIscritti = new ArrayList<String>();
 		List<Studente> studenti = new ArrayList<Studente>();
-		Corso c = corsoDao.cercaCodiceDatoIlNome(nomeCorso);
 		
-		//In realtà studenti al suo interno ha solo matricole, quindi devo sfruttare getNOmeCognome
-		//per avere tutte le info dello studente
-		studenti=corsoDao.getStudentiIscrittiAlCorso(c);
-		for(Studente s1: studenti) {
-			s1=studenteDao.getNomeCognome(s1.getMatricola());
-		}
 		
-		for(Studente s:  corsoDao.getStudentiIscrittiAlCorso(c)) {
-			studentiIscritti.add(s.getMatricola()+ " "+s.getNome()+" "+s.getCognome());
+		//In studenti salvo tutti gli studenti iscritti (grazie alla query in corsoDAO) al corso selezionato
+		studenti=corsoDao.getStudentiIscrittiAlCorso(corsoScelto);
+		
+		
+		//Una volta ottenuti gli studenti aggiungo a una lista di stringhe tutte le info
+		for(Studente s:  studenti) {
+			studentiIscritti.add(s.getMatricola()+ " "+s.getNome()+" "+s.getCognome()+" "+s.getCds());
 		}
 		return studentiIscritti;
 		
@@ -70,10 +73,15 @@ public class Model {
 
 	public List<Corso> getCorsiACuiEIscritto(Studente s) {
 		// TODO Auto-generated method stub
-		List<Corso> corsi = new ArrayList<Corso>();
 		
-		return corsi;
+		//Metodo nel dao che mi ritorna la lista di corsi a cui è iscritto lo studente s
+		return studenteDao.getCorsiACuiEIscrittoDao(s);
 		
+	}
+
+	public Corso getCorsoDatoNome(String nomeCorsoScelto) {
+		// TODO Auto-generated method stub
+		return corsoDao.cercaCodiceDatoIlNome(nomeCorsoScelto);
 	}
 	
 	

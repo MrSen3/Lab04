@@ -141,7 +141,7 @@ public class CorsoDAO {
 	 */
 	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
 		// TODO
-		final String sql = "SELECT * FROM iscrizione WHERE codins = ?";
+		final String sql = "SELECT * FROM iscrizione, studente WHERE iscrizione.matricola=studente.matricola AND codins=?"; //JOIN
 		List<Studente> studentiIscrittiAlCorso = new ArrayList<Studente>();
 		
 		try {
@@ -155,16 +155,20 @@ public class CorsoDAO {
 			while (rs.next()) {
 
 				int matricola = rs.getInt("matricola");
-				//String codins = rs.getString("codins");
+				String nome = rs.getString("nome");
+				String cognome = rs.getString("cognome");
+				String cds = rs.getString("cds");
+				
+				
 				
 				//Uso il costruttore con la sola matricola
-				Studente s = new Studente(matricola);
+				Studente s = new Studente(matricola, nome, cognome, cds);
 				studentiIscrittiAlCorso.add(s);
 			}
 			
 			conn.close();
 			
-			//In realtà sto restituendo una lista di matricole
+			//In realtà sto restituendo la lista di studenti
 			return studentiIscrittiAlCorso;
 
 		} catch (SQLException e) {

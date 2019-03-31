@@ -1,6 +1,7 @@
 package it.polito.tdp.lab04.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -79,7 +80,10 @@ public class SegreteriaStudentiController {
     	} 
     	
     	
-    	List<String> iscrittiAlCorso = this.model.getIscrittiAlCorso(nomeCorsoScelto);
+    	//A questo punto prendo il nome del corso scelto e ricavo il Corso corrispondente
+    	Corso c = this.model.getCorsoDatoNome(nomeCorsoScelto);
+    	
+    	List<String> iscrittiAlCorso = this.model.getIscrittiAlCorso(c);
     	
     	for(String s: iscrittiAlCorso) {
     		txtResult.appendText(s+ "\n");
@@ -89,34 +93,73 @@ public class SegreteriaStudentiController {
     
     
     /*
-     * Questo metodo deve prendere la matricola contenuta nel textfield apposito, controllare 
-     * se e' presente nel database, e se lo e' stampare nella text area in fondo tutti i corsi
-     *  a cui e' iscritto
+     * Questo metodo ha due funzioni:
+     * 1)se viene inserito solo lo studente, deve prendere la matricola contenuta nel textfield apposito, controllare se e' presente 
+     * nel database, e se lo e' stampare nella text area in fondo tutti i corsi  a cui e' iscritto lo studente;
+     * 2)se viene inserito sia lo studente che il corso, allora deve cercare nel db se lo studente è iscritto al corso specificato 
+     * e stampare l'esito della ricerca nella textArea
      */
     @FXML
     void doCercaCorsi(ActionEvent event) {
     	
     	txtResult.clear();
+    	
+    	
     	int matricola;
-    	Studente s;
+    	Studente studente;
+    	String nomeCorsoScelto = comboBoxCorsi.getValue();
+    	List <Corso> corsi = new ArrayList<Corso>();
     	
     	try {
     		
     		matricola=Integer.parseInt(txtMatricola.getText());
    
-    		s=model.getNomeECognome(matricola);
-    		
-    		if(s==null) {
+    		studente=model.getNomeECognome(matricola);
+    		System.out.println(studente.toString());
+    		//Se non esiste la matricola nel db
+    		if(studente == null) {
     			txtResult.appendText("Nessuno studente corrispondente alla matricola!\n");
     			return;
     		}
     		
-    		//Se lo studente esiste bisogna stampare nella textResult tutti i corsi a cui è iscritto
-    		model.getCorsiACuiEIscritto(s);
-    		
-    	} catch (NumberFormatException e) {
+    		//Se lo studente esiste stampo nei due textfield nome e cognome
+    		txtNome.setText(studente.getNome());
+        	txtCognome.setText(studente.getCognome());
+        	
+        	
+        	
+        	//CASO 1: nessun corso selezionato= bisogna stampare tutti i corsi a cui è iscritto
+        	if(nomeCorsoScelto==null) {         		
+        		//Se lo studente esiste bisogna stampare nella textResult tutti i corsi a cui è iscritto
+        		
+        		//Devo crearmi un metodo nel model a cui passo lo studente che mi deve restituire la lista di corsi a cui è iscritto
+        		corsi=model.getCorsiACuiEIscritto(studente);
+        	
+        		//Stampo tutti i corsi nella textArea
+        		for (Corso c: corsi) {
+        			txtResult.appendText(c.toString()+"\n");
+        		}
+        	
+        	
+        	}
+        	//CASO 2: corso selezionato= bisogna verificare se la matricola è iscritta al corso selezionato
+        	else {
+        		Corso c = this.model.getCorsoDatoNome(nomeCorsoScelto);
+        		boolean iscritto=false;
+        		
+        		
+        		
+        		
+        	}
+    	}
+    	
+    	
+    	
+    	catch (NumberFormatException e) {
     		txtResult.appendText("Devi inserire una matricola composta da 6 cifre\n");
-     	} 
+     	} catch(RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!");
+     	}  
     }
 
     /*
@@ -135,7 +178,7 @@ public class SegreteriaStudentiController {
 		Studente s;
 		
     	try {
-    		//Questa funziona bene
+    	
     		matricola=Integer.parseInt(txtMatricola.getText());
     		
     		//Cerco lo studente tramite il metodo nel model
