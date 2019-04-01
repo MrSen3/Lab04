@@ -97,6 +97,11 @@ public class Model {
 		}
 		return false;
 	}
+
+	public boolean iscrivi(Corso c, Studente s) {
+		// TODO Auto-generated method stub
+		return corsoDao.iscriviDao(c, s);
+	}
 	
 	
 

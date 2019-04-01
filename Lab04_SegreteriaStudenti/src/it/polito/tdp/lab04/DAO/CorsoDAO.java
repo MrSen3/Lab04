@@ -180,8 +180,27 @@ public class CorsoDAO {
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
-	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
-		// TODO
+
+
+	public boolean iscriviDao(Corso corso, Studente studente) {
+		// TODO Auto-generated method stub
+		//final String sql = "";
+		
+		
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			
+			st.setString(1, corso.getCodins());
+			st.setInt(2, studente.getMatricola());
+			
+			ResultSet rs = st.executeQuery();
+
+			//while (rs.next()) {	}
+			
+			conn.close();
+			
+		
 		// ritorna true se l'iscrizione e' avvenuta con successo
 		return false;
 	}

@@ -85,6 +85,12 @@ public class SegreteriaStudentiController {
     	
     	List<String> iscrittiAlCorso = this.model.getIscrittiAlCorso(c);
     	
+    	if(iscrittiAlCorso.size()==0) {
+    		//Allora non ci sono iscritti al corso x
+    		txtResult.appendText("Non ci sono iscritti al corso!\n");
+    		return;
+    	}
+    	
     	for(String s: iscrittiAlCorso) {
     		txtResult.appendText(s+ "\n");
     	}    	
@@ -142,6 +148,8 @@ public class SegreteriaStudentiController {
         	
         	
         	}
+        	
+        	
         	//CASO 2: corso selezionato=bisogna verificare se la matricola è iscritta al corso selezionato
         	else {
         		Corso corso = this.model.getCorsoDatoNome(nomeCorsoScelto);
@@ -176,7 +184,6 @@ public class SegreteriaStudentiController {
     @FXML
     void doCompleta(ActionEvent event) {
     	
-    	
     	txtResult.clear();
 		txtNome.clear();
 		txtCognome.clear();
@@ -207,16 +214,82 @@ public class SegreteriaStudentiController {
 			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!\n");
      	}
     	
-    	//Studente studente=new Studente(matricola);
-    	
-    	
-    	
     }
 
+    
     @FXML
     void doIscrizione(ActionEvent event) {
-
+    	
+    	txtResult.clear();
+    	
+    	
+    	String nomeCorsoScelto = comboBoxCorsi.getValue();
+    	System.out.println(nomeCorsoScelto);
+    	int matricola;
+		Studente s;
     
+		//CONTROLLO CHE SIA STATO SELEZIONATO UN CORSO
+    	//Se l'utente non seleziona nessun corso viene selezionato automaticamente lo spazio vuoto
+    	if(nomeCorsoScelto==null) {
+    		comboBoxCorsi.setValue(comboBoxCorsi.getItems().get(0));
+    	}
+    	
+    	
+    	if(nomeCorsoScelto.isEmpty()) { 
+    		txtResult.appendText("ATTENZIONE: Nessun corso è stato selezionato!\n");
+    		return;
+    	} 
+    	
+    	
+    	//A questo punto prendo il nome del corso scelto e ricavo il Corso corrispondente
+    	Corso c = this.model.getCorsoDatoNome(nomeCorsoScelto);
+    	
+    	//Abbiamo il corso selezionato, adesso mi serve lo studente
+		
+    	try {
+    	
+    		matricola=Integer.parseInt(txtMatricola.getText());
+    		
+    		//Cerco lo studente tramite il metodo nel model
+    		s=model.getNomeECognome(matricola);
+    		
+    		//Se non esiste la matricola nel db
+    		if(s == null) {
+    			txtResult.appendText("Nessuno studente corrispondente alla matricola!\n");
+    			return;
+    		}
+    		
+    		//Se lo studente esiste stampo nei due textfield nome e cognome
+    		txtNome.setText(s.getNome());
+        	txtCognome.setText(s.getCognome());
+    		 	
+        	
+        	
+        	
+    	} catch (NumberFormatException e) {
+    		txtResult.appendText("Devi inserire una matricola composta da 6 cifre\n");
+     	} catch (RuntimeException e) {
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!\n");
+     	}
+    	
+    	
+    	
+    	
+    	
+    	//Abbiamo sia lo studente che il corso a cui deve essere icritto
+    	
+    	//Prima cosa: controllo se è già iscritto
+    	if(model.isIscritto(s, c)) {
+    		txtResult.appendText("Lo studente è già iscritto al corso selezionato!\n");
+    		return;
+    	}
+    	//Seconda: se non lo è, lo devo iscrivere
+    	boolean iscritto=false;
+    	iscritto=model.iscrivi(c, s);
+    	
+    	
+    	
+    	
     }
 
     @FXML
