@@ -99,7 +99,7 @@ public class CorsoDAO {
 	public Corso cercaCodiceDatoIlNome(String nomeCorso) {
 		// TODO Auto-generated method stub
 		
-		final String sql = "SELECT * FROM corso WHERE nomeCorso = ?";
+		final String sql = "SELECT * FROM corso WHERE nome = ?";
 
 		Corso corsoCercato=null;
 
@@ -123,15 +123,13 @@ public class CorsoDAO {
 			}
 
 			conn.close();
-			
-			return corsoCercato;
 
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new RuntimeException("Errore Db");
 		}
 		
-		
+		return corsoCercato;
 		
 	}
 	

@@ -53,8 +53,6 @@ public class Model {
 			studentiIscritti.add(s.getMatricola()+ " "+s.getNome()+" "+s.getCognome()+" "+s.getCds());
 		}
 		return studentiIscritti;
-		
-		
 	}
 
 	
@@ -82,6 +80,22 @@ public class Model {
 	public Corso getCorsoDatoNome(String nomeCorsoScelto) {
 		// TODO Auto-generated method stub
 		return corsoDao.cercaCodiceDatoIlNome(nomeCorsoScelto);
+	}
+
+	public boolean isIscritto(Studente studente, Corso corso) {
+		// TODO Auto-generated method stub
+		
+		//Qui uso il metodo già creato in precedenza, getCorsiACuiEIscrittoDao(studente) per avere la lista di corsi a cui è iscritto lo studente specificato
+		List<Corso> corsiACuiEIscritto=new ArrayList<Corso>();
+		corsiACuiEIscritto=studenteDao.getCorsiACuiEIscrittoDao(studente);
+		
+		//Adesso cerca nella lista di corsi  a cui è iscritto se è presente quello specificato dall'utente
+		for(Corso c: corsiACuiEIscritto) {
+			if (c.equals(corso)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	

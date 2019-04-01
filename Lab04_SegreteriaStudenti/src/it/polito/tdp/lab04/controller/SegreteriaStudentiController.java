@@ -142,14 +142,21 @@ public class SegreteriaStudentiController {
         	
         	
         	}
-        	//CASO 2: corso selezionato= bisogna verificare se la matricola è iscritta al corso selezionato
+        	//CASO 2: corso selezionato=bisogna verificare se la matricola è iscritta al corso selezionato
         	else {
-        		Corso c = this.model.getCorsoDatoNome(nomeCorsoScelto);
+        		Corso corso = this.model.getCorsoDatoNome(nomeCorsoScelto);
         		boolean iscritto=false;
-        		
-        		
-        		
-        		
+        		System.out.println(iscritto+ "");
+        		//Adesso devo fare un metodo che mi restituisce vero se lo studente inserito è iscritto al corso selezionato, falso altrimenti
+        		iscritto=model.isIscritto(studente, corso);
+        		System.out.println(iscritto+ "");
+        		if(iscritto==true) {
+        			//Significa che lo studente è iscritto al corso
+        			txtResult.appendText("Lo studente è iscritto al corso!\n");
+        		}
+        		else {
+        			txtResult.appendText("Lo studente non è iscritto al corso!\n");
+        		}
         	}
     	}
     	
@@ -158,7 +165,7 @@ public class SegreteriaStudentiController {
     	catch (NumberFormatException e) {
     		txtResult.appendText("Devi inserire una matricola composta da 6 cifre\n");
      	} catch(RuntimeException e) {
-			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!");
+			txtResult.setText("ERRORE DI CONNESSIONE AL DATABASE!1");
      	}  
     }
 
