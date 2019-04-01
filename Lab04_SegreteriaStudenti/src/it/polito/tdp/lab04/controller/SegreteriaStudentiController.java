@@ -226,7 +226,7 @@ public class SegreteriaStudentiController {
     	String nomeCorsoScelto = comboBoxCorsi.getValue();
     	System.out.println(nomeCorsoScelto);
     	int matricola;
-		Studente s;
+		Studente s = null;
     
 		//CONTROLLO CHE SIA STATO SELEZIONATO UN CORSO
     	//Se l'utente non seleziona nessun corso viene selezionato automaticamente lo spazio vuoto
@@ -287,7 +287,10 @@ public class SegreteriaStudentiController {
     	boolean iscritto=false;
     	iscritto=model.iscrivi(c, s);
     	
-    	
+    	if(iscritto)
+    		txtResult.appendText("Iscrizione avvenuta correttamente!\n");
+    	else
+    		txtResult.appendText("Problema durante l'iscrizione!\n");
     	
     	
     }

@@ -1,5 +1,8 @@
 package it.polito.tdp.lab04.DAO;
 
+import it.polito.tdp.lab04.model.*;
+import java.util.*;
+
 public class TestDB {
 
 	public static void main(String[] args) {
@@ -9,12 +12,16 @@ public class TestDB {
 		 */
 		
 		CorsoDAO cdao = new CorsoDAO();
-		cdao.getTuttiICorsi();
-		
-		//cdao.getCorso(new Corso("01KSUPG"));
-		//C'è un problema con la classe studentedao
 		StudenteDAO sdao = new StudenteDAO();
-		sdao.getTuttiStudenti();
+		List<Corso> corsi=new ArrayList<>();
+		corsi=cdao.getTuttiICorsi();
+		List<Studente>studenti= new ArrayList<Studente>();
+		studenti=sdao.getTuttiStudenti();
+		
+		
+		
+		
+		//cdao.iscriviDao(studenti.get(1), studenti.get(1).);
 
 	}
 

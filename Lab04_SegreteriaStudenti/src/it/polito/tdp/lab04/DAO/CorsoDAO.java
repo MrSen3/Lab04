@@ -184,25 +184,32 @@ public class CorsoDAO {
 
 	public boolean iscriviDao(Corso corso, Studente studente) {
 		// TODO Auto-generated method stub
-		//final String sql = "";
-		
+		final String sql = "INSERT INTO iscrizione (matricola,codins) VALUES (?, ?)";
+		boolean iscritto=false;
 		
 		try {
 			Connection conn = ConnectDB.getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
 			
-			st.setString(1, corso.getCodins());
-			st.setInt(2, studente.getMatricola());
+			System.out.println("Studente passato al DAO " +studente.toString());
+			System.out.println("Corso passato al DAO " +corso.toString());
 			
-			ResultSet rs = st.executeQuery();
-
-			//while (rs.next()) {	}
+			st.setInt(1, studente.getMatricola());
+			st.setString(2, corso.getCodins());
+			
+			int res = st.executeUpdate();
+			
+			if(res==1) {
+				iscritto=true;}
 			
 			conn.close();
-			
+		}
+			catch (SQLException e) {
+				// e.printStackTrace();
+				throw new RuntimeException("Errore Db");
+			}
 		
-		// ritorna true se l'iscrizione e' avvenuta con successo
-		return false;
+		return iscritto;
 	}
 
 	
